@@ -276,6 +276,7 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
                             widget.trailing!,
                           ],
                         ],
+                        SizedBox(width: widget.global.style.itemInnerSpacing),
                       ],
                     ),
                   ),

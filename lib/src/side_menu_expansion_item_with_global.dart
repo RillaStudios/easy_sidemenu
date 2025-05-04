@@ -147,14 +147,18 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
                                     : const Text(''),
                               ],
                             ),
-                            Padding(
-                              padding: widget.expandedIconPadding ?? const EdgeInsets.all(0),
-                              child: Icon(
-                                isExpanded
-                                    ? (widget.expandedOpenIcon ?? Icons.expand_less)
-                                    : (widget.expandedCloseIcon ?? Icons.expand_more),
-                                color: isExpanded ? widget.global.style.arrowOpen : widget.global.style.arrowCollapse,
-                              ),
+                            Row(
+                              children: [
+                                Icon(
+                                  isExpanded
+                                      ? (widget.expandedOpenIcon ?? Icons.expand_less)
+                                      : (widget.expandedCloseIcon ?? Icons.expand_more),
+                                  color: isExpanded ? widget.global.style.arrowOpen : widget.global.style.arrowCollapse,
+                                ),
+                                SizedBox(
+                                  width: widget.global.style.itemInnerSpacing,
+                                ),
+                              ],
                             ),
                           ],
                         ),
