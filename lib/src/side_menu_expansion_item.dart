@@ -28,7 +28,17 @@ class SideMenuExpansionItem {
   /// The icon to display when the menu is collapsed
   final IconData? expandedCloseIcon;
 
-  final EdgeInsets? expandedIconPadding;
+  /// The color of the divider between the menu items
+  final Color? dividerColor;
+
+  /// Bool to show the divider or not
+  final bool showDivider;
+
+  /// Divider thickness
+  final double dividerThickness;
+
+  /// Divider height
+  final double dividerHeight;
 
   /// Control whether or not the SideMenuExpansion should be expanded initialy or not.
   /// Default is collabsed
@@ -43,7 +53,10 @@ class SideMenuExpansionItem {
     this.initialExpanded,
     this.expandedOpenIcon,
     this.expandedCloseIcon,
-    this.expandedIconPadding,
+    this.dividerColor,
+    this.showDivider = true,
+    this.dividerThickness = 1.0,
+    this.dividerHeight = 0.0,
     required this.children,
   })  : assert(title != null || icon != null, 'Title and icon should not be empty at the same time'),
         super();

@@ -33,6 +33,18 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
   /// The icon to display when the menu is collapsed
   final IconData? expandedCloseIcon;
 
+  /// The color of the divider between the menu items
+  final Color? dividerColor;
+
+  /// Bool to show the divider or not
+  final bool showDivider;
+
+  /// Divider thickness
+  final double dividerThickness;
+
+  /// Divider height
+  final double dividerHeight;
+
   /// A function that will be called when tap on [SideMenuExpansionItem] corresponding
   /// to this [SideMenuExpansionItem]
   final void Function(int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
@@ -45,6 +57,10 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
       this.iconWidget,
       this.expandedOpenIcon,
       this.expandedCloseIcon,
+      this.dividerColor,
+      this.showDivider = true,
+      this.dividerThickness = 1.0,
+      this.dividerHeight = 0.0,
       this.onTap,
       required this.index,
       required this.children})
@@ -89,6 +105,12 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (isExpanded && widget.showDivider)
+          Divider(
+            color: widget.dividerColor ?? Colors.black,
+            height: widget.dividerHeight,
+            thickness: widget.dividerThickness,
+          ),
         InkWell(
           onTap: () {
             setState(() {
@@ -170,7 +192,15 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
         if (isExpanded)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.children,
+            children: [
+              ...widget.children,
+              if (isExpanded && widget.showDivider)
+                Divider(
+                  color: widget.dividerColor ?? Colors.black,
+                  height: widget.dividerHeight,
+                  thickness: widget.dividerThickness,
+                ),
+            ],
           ),
       ],
     );
