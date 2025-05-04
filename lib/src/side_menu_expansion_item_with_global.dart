@@ -33,9 +33,6 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
   /// The icon to display when the menu is collapsed
   final IconData? expandedCloseIcon;
 
-  /// The color of the divider between the menu items
-  final Color? dividerColor;
-
   /// Bool to show the divider or not
   final bool? showDivider;
 
@@ -57,7 +54,6 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
       this.iconWidget,
       this.expandedOpenIcon,
       this.expandedCloseIcon,
-      this.dividerColor,
       this.showDivider,
       this.dividerThickness,
       this.dividerHeight,
@@ -107,7 +103,7 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
       children: [
         if (isExpanded && widget.showDivider == true)
           Divider(
-            color: widget.dividerColor ?? Colors.black,
+            color: widget.global.style.expandedDividerColor ?? Colors.black,
             height: widget.dividerHeight ?? 0.5,
             thickness: widget.dividerThickness ?? 0.5,
           ),
@@ -196,7 +192,7 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
               ...widget.children,
               if (isExpanded && widget.showDivider == true)
                 Divider(
-                  color: widget.dividerColor ?? Colors.black,
+                  color: widget.global.style.expandedDividerColor ?? Colors.black,
                   height: widget.dividerHeight ?? 0.5,
                   thickness: widget.dividerThickness ?? 0.5,
                 ),
