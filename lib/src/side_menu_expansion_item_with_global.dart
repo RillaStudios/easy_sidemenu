@@ -33,6 +33,8 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
   /// The icon to display when the menu is collapsed
   final IconData? expandedCloseIcon;
 
+  final EdgeInsets? expandedIconPadding;
+
   /// A function that will be called when tap on [SideMenuExpansionItem] corresponding
   /// to this [SideMenuExpansionItem]
   final void Function(int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
@@ -45,6 +47,7 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
       this.iconWidget,
       this.expandedOpenIcon,
       this.expandedCloseIcon,
+      this.expandedIconPadding,
       this.onTap,
       required this.index,
       required this.children})
@@ -58,6 +61,9 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
 class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
   /// Set icon for of [SideMenuExpansionItemWithGlobal]
   late bool isExpanded;
+
+  ValueNotifier<bool> isHovered = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -84,74 +90,88 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          isExpanded = !isExpanded;
-          widget.global.expansionStateList[widget.index] = isExpanded;
-        });
-        widget.onTap?.call(widget.index, widget.global.controller, isExpanded);
-      },
-      child: Column(
-        children: [
-          Padding(
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              isExpanded = !isExpanded;
+              widget.global.expansionStateList[widget.index] = isExpanded;
+            });
+            widget.onTap?.call(widget.index, widget.global.controller, isExpanded);
+          },
+          onHover: (value) {
+            isHovered.value = value;
+          },
+          highlightColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          child: Padding(
             padding: widget.global.style.itemOuterPadding,
-            child: Container(
-              height: widget.global.style.itemHeight,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: widget.global.style.itemBorderRadius,
-              ),
-              child: ValueListenableBuilder(
-                valueListenable: widget.global.displayModeState,
-                builder: (context, value, child) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: widget.global.style.itemInnerSpacing),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+            child: ValueListenableBuilder<bool>(
+              valueListenable: isHovered,
+              builder: (context, value, child) {
+                return Container(
+                  height: widget.global.style.itemHeight,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: widget.global.style.itemBorderRadius,
+                    color: value ? widget.global.style.hoverColor : widget.global.style.backgroundColor,
+                  ),
+                  child: ValueListenableBuilder(
+                    valueListenable: widget.global.displayModeState,
+                    builder: (context, value, child) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: widget.global.style.itemInnerSpacing),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(width: widget.global.style.itemInnerSpacing * 2),
-                            _generateIconWidget(widget.icon, widget.iconWidget),
-                            SizedBox(width: widget.global.style.itemInnerSpacing),
-                            (value == SideMenuDisplayMode.open)
-                                ? Text(
-                                    widget.title ?? '',
-                                    style: widget.global.expansionStateList[widget.index]
-                                        ? const TextStyle(fontSize: 17, color: Colors.black).merge(
-                                            widget.global.style.selectedTitleTextStyleExpandable ??
-                                                widget.global.style.selectedTitleTextStyle)
-                                        : const TextStyle(fontSize: 17, color: Colors.black54).merge(
-                                            widget.global.style.unselectedTitleTextStyleExpandable ??
-                                                widget.global.style.unselectedTitleTextStyle),
-                                  )
-                                : const Text(''),
+                            Row(
+                              children: [
+                                SizedBox(width: widget.global.style.itemInnerSpacing * 2),
+                                _generateIconWidget(widget.icon, widget.iconWidget),
+                                SizedBox(width: widget.global.style.itemInnerSpacing),
+                                (value == SideMenuDisplayMode.open)
+                                    ? Text(
+                                        widget.title ?? '',
+                                        style: widget.global.expansionStateList[widget.index]
+                                            ? const TextStyle(fontSize: 17, color: Colors.black).merge(
+                                                widget.global.style.selectedTitleTextStyleExpandable ??
+                                                    widget.global.style.selectedTitleTextStyle)
+                                            : const TextStyle(fontSize: 17, color: Colors.black54).merge(
+                                                widget.global.style.unselectedTitleTextStyleExpandable ??
+                                                    widget.global.style.unselectedTitleTextStyle),
+                                      )
+                                    : const Text(''),
+                              ],
+                            ),
+                            Padding(
+                              padding: widget.expandedIconPadding ?? const EdgeInsets.all(0),
+                              child: Icon(
+                                isExpanded
+                                    ? (widget.expandedOpenIcon ?? Icons.expand_less)
+                                    : (widget.expandedCloseIcon ?? Icons.expand_more),
+                                color: isExpanded ? widget.global.style.arrowOpen : widget.global.style.arrowCollapse,
+                              ),
+                            ),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(widget.global.style.itemInnerSpacing),
-                          child: Icon(
-                            isExpanded
-                                ? (widget.expandedOpenIcon ?? Icons.expand_less)
-                                : (widget.expandedCloseIcon ?? Icons.expand_more),
-                            color: isExpanded ? widget.global.style.arrowOpen : widget.global.style.arrowCollapse,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
-          if (isExpanded)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.children,
-            ),
-        ],
-      ),
+        ),
+        if (isExpanded)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.children,
+          ),
+      ],
     );
   }
 }

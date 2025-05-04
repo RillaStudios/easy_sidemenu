@@ -86,12 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
             footer: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.lightBlue[50],
-                    borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(color: Colors.lightBlue[50], borderRadius: BorderRadius.circular(12)),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                   child: Text(
                     'mohada',
                     style: TextStyle(fontSize: 15, color: Colors.grey[800]),
@@ -122,8 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SideMenuExpansionItem(
                 title: "Expansion Item",
                 icon: const Icon(Icons.kitchen),
-                onTap: (index, _, isExpanded) =>
-                    {print('$index, expanded $isExpanded')},
+                onTap: (index, _, isExpanded) => {print('$index, expanded $isExpanded')},
                 children: [
                   SideMenuItem(
                     title: 'Expansion Item 1',
@@ -153,17 +149,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 icon: const Icon(Icons.file_copy_rounded),
                 trailing: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    decoration:
+                        const BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.all(Radius.circular(6))),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
                       child: Text(
                         'New',
                         style: TextStyle(fontSize: 11, color: Colors.grey[800]),
                       ),
                     )),
+              ),
+              SideMenuExpansionItem(
+                title: "Expansion Item",
+                icon: const Icon(Icons.kitchen),
+                onTap: (index, _, isExpanded) => {print('$index, expanded $isExpanded')},
+                children: [
+                  SideMenuItem(
+                    title: 'Expansion Item 1',
+                    onTap: (index, _) {
+                      sideMenu.changePage(index);
+                    },
+                    icon: const Icon(Icons.home),
+                    badgeContent: const Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    tooltipContent: "Expansion Item 1",
+                  ),
+                  SideMenuItem(
+                    title: 'Expansion Item 2',
+                    onTap: (index, _) {
+                      sideMenu.changePage(index);
+                    },
+                    icon: const Icon(Icons.supervisor_account),
+                  )
+                ],
               ),
               SideMenuItem(
                 title: 'Download',

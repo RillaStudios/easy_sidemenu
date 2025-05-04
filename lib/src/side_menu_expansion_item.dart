@@ -28,6 +28,8 @@ class SideMenuExpansionItem {
   /// The icon to display when the menu is collapsed
   final IconData? expandedCloseIcon;
 
+  final EdgeInsets? expandedIconPadding;
+
   /// Control whether or not the SideMenuExpansion should be expanded initialy or not.
   /// Default is collabsed
   final bool? initialExpanded;
@@ -41,6 +43,7 @@ class SideMenuExpansionItem {
     this.initialExpanded,
     this.expandedOpenIcon,
     this.expandedCloseIcon,
+    this.expandedIconPadding,
     required this.children,
   })  : assert(title != null || icon != null, 'Title and icon should not be empty at the same time'),
         super();

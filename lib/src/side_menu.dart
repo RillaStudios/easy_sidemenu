@@ -104,6 +104,7 @@ class SideMenu extends StatefulWidget {
           onTap: data.onTap,
           expandedCloseIcon: data.expandedCloseIcon,
           expandedOpenIcon: data.expandedOpenIcon,
+          expandedIconPadding: data.expandedIconPadding,
           children: data.children
               .map((childData) => SideMenuItemWithGlobal(
                     global: global,
