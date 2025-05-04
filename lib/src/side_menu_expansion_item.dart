@@ -12,8 +12,7 @@ class SideMenuExpansionItem {
 
   /// A function that will be called when tap on [SideMenuExpansionItem] corresponding
   /// to this [SideMenuExpansionItem]
-  final void Function(
-      int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
+  final void Function(int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
 
   /// A Icon to display before [title]
   final Icon? icon;
@@ -22,6 +21,12 @@ class SideMenuExpansionItem {
   final Widget? iconWidget;
 
   final List<SideMenuItem> children;
+
+  /// The icon to display when the menu is expanded
+  final IconData? expandedOpenIcon;
+
+  /// The icon to display when the menu is collapsed
+  final IconData? expandedCloseIcon;
 
   /// Control whether or not the SideMenuExpansion should be expanded initialy or not.
   /// Default is collabsed
@@ -34,8 +39,9 @@ class SideMenuExpansionItem {
     this.icon,
     this.iconWidget,
     this.initialExpanded,
+    this.expandedOpenIcon,
+    this.expandedCloseIcon,
     required this.children,
-  })  : assert(title != null || icon != null,
-            'Title and icon should not be empty at the same time'),
+  })  : assert(title != null || icon != null, 'Title and icon should not be empty at the same time'),
         super();
 }

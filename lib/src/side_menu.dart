@@ -75,8 +75,7 @@ class SideMenu extends StatefulWidget {
         sideMenuExpansionItemCount = sideMenuExpansionItemCount + 1;
       }
     }
-    global.expansionStateList =
-        List<bool>.filled(sideMenuExpansionItemCount, false);
+    global.expansionStateList = List<bool>.filled(sideMenuExpansionItemCount, false);
     sidemenuitems.items = items.map((data) {
       if (data is SideMenuItem) {
         return SideMenuItemWithGlobal(
@@ -94,8 +93,7 @@ class SideMenu extends StatefulWidget {
       } else if (data is SideMenuExpansionItem) {
         sideMenuExpansionItemIndex = sideMenuExpansionItemIndex + 1;
         if (data.initialExpanded != null) {
-          global.expansionStateList[sideMenuExpansionItemIndex] =
-              data.initialExpanded!;
+          global.expansionStateList[sideMenuExpansionItemIndex] = data.initialExpanded!;
         }
         return SideMenuExpansionItemWithGlobal(
           global: global,
@@ -104,6 +102,8 @@ class SideMenu extends StatefulWidget {
           index: sideMenuExpansionItemIndex,
           iconWidget: data.iconWidget,
           onTap: data.onTap,
+          expandedCloseIcon: data.expandedCloseIcon,
+          expandedOpenIcon: data.expandedOpenIcon,
           children: data.children
               .map((childData) => SideMenuItemWithGlobal(
                     global: global,
@@ -159,8 +159,7 @@ class _SideMenuState extends State<SideMenu> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _currentWidth = _calculateWidth(
-        widget.global.style.displayMode ?? SideMenuDisplayMode.auto, context);
+    _currentWidth = _calculateWidth(widget.global.style.displayMode ?? SideMenuDisplayMode.auto, context);
   }
 
   // Toggles the state of the hamburger between open and close. No parameters. No return value.
@@ -233,16 +232,14 @@ class _SideMenuState extends State<SideMenu> {
       );
     } else {
       if (menuStyle.backgroundColor != null) {
-        menuStyle.decoration =
-            menuStyle.decoration!.copyWith(color: menuStyle.backgroundColor);
+        menuStyle.decoration = menuStyle.decoration!.copyWith(color: menuStyle.backgroundColor);
       }
       return menuStyle.decoration!;
     }
   }
 
   Duration _toggleDuration() {
-    return widget.displayModeToggleDuration ??
-        const Duration(milliseconds: 350);
+    return widget.displayModeToggleDuration ?? const Duration(milliseconds: 350);
   }
 
   @override
@@ -271,8 +268,7 @@ class _SideMenuState extends State<SideMenu> {
     );
 
     // Return the side menu widget
-    return ((widget.global.style.showHamburger) &&
-            (_hamburgerMode == SideMenuHamburgerMode.close))
+    return ((widget.global.style.showHamburger) && (_hamburgerMode == SideMenuHamburgerMode.close))
         ? Align(alignment: Alignment.topLeft, child: hamburgerIcon)
         : AnimatedContainer(
             duration: _toggleDuration(),
@@ -286,9 +282,7 @@ class _SideMenuState extends State<SideMenu> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (widget.global.style.showHamburger) hamburgerIcon,
-                      if (widget.global.style.displayMode ==
-                              SideMenuDisplayMode.compact &&
-                          showToggle)
+                      if (widget.global.style.displayMode == SideMenuDisplayMode.compact && showToggle)
                         const SizedBox(
                           height: 42,
                         ),
@@ -297,23 +291,16 @@ class _SideMenuState extends State<SideMenu> {
                     ],
                   ),
                 ),
-                if ((widget.footer != null &&
-                        widget.global.displayModeState.value !=
-                            SideMenuDisplayMode.compact) ||
+                if ((widget.footer != null && widget.global.displayModeState.value != SideMenuDisplayMode.compact) ||
                     (widget.footer != null && alwaysShowFooter))
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: widget.footer!,
                   ),
-                if (widget.global.style.displayMode !=
-                        SideMenuDisplayMode.auto &&
-                    showToggle)
+                if (widget.global.style.displayMode != SideMenuDisplayMode.auto && showToggle)
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: widget.global.displayModeState.value ==
-                              SideMenuDisplayMode.open
-                          ? 0
-                          : 4,
+                      horizontal: widget.global.displayModeState.value == SideMenuDisplayMode.open ? 0 : 4,
                       vertical: 0,
                     ),
                     child: Row(
@@ -322,23 +309,16 @@ class _SideMenuState extends State<SideMenu> {
                         SideMenuToggle(
                           global: widget.global,
                           onTap: () {
-                            if (context
-                                    .findAncestorStateOfType<_SideMenuState>()
-                                    ?.animationInProgress ??
-                                false) {
+                            if (context.findAncestorStateOfType<_SideMenuState>()?.animationInProgress ?? false) {
                               return;
                             }
-                            if (widget.global.displayModeState.value ==
-                                SideMenuDisplayMode.compact) {
+                            if (widget.global.displayModeState.value == SideMenuDisplayMode.compact) {
                               setState(() {
-                                widget.global.style.displayMode =
-                                    SideMenuDisplayMode.open;
+                                widget.global.style.displayMode = SideMenuDisplayMode.open;
                               });
-                            } else if (widget.global.displayModeState.value ==
-                                SideMenuDisplayMode.open) {
+                            } else if (widget.global.displayModeState.value == SideMenuDisplayMode.open) {
                               setState(() {
-                                widget.global.style.displayMode =
-                                    SideMenuDisplayMode.compact;
+                                widget.global.style.displayMode = SideMenuDisplayMode.compact;
                               });
                             }
                           },
@@ -354,8 +334,7 @@ class _SideMenuState extends State<SideMenu> {
   @override
   void dispose() {
     Future.delayed(Duration.zero, () {
-      widget.global.displayModeState
-          .change(widget.global.displayModeState.value);
+      widget.global.displayModeState.change(widget.global.displayModeState.value);
     });
     super.dispose();
   }
