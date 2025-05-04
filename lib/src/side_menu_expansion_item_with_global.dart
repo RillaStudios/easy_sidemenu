@@ -27,10 +27,15 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
   /// for maintaining record of the state
   final int index;
 
+  /// The icon to display when the menu is expanded
+  final IconData? expandedOpenIcon;
+
+  /// The icon to display when the menu is collapsed
+  final IconData? expandedCloseIcon;
+
   /// A function that will be called when tap on [SideMenuExpansionItem] corresponding
   /// to this [SideMenuExpansionItem]
-  final void Function(
-      int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
+  final void Function(int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
 
   const SideMenuExpansionItemWithGlobal(
       {Key? key,
@@ -38,16 +43,16 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
       this.title,
       this.icon,
       this.iconWidget,
+      this.expandedOpenIcon,
+      this.expandedCloseIcon,
       this.onTap,
       required this.index,
       required this.children})
-      : assert(title != null || icon != null,
-            'Title and icon should not be empty at the same time'),
+      : assert(title != null || icon != null, 'Title and icon should not be empty at the same time'),
         super(key: key);
 
   @override
-  State<SideMenuExpansionItemWithGlobal> createState() =>
-      _SideMenuExpansionState();
+  State<SideMenuExpansionItemWithGlobal> createState() => _SideMenuExpansionState();
 }
 
 class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
@@ -68,73 +73,82 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
 
     final bool isExpanded = widget.global.expansionStateList[widget.index];
     final Color iconColor = isExpanded
-        ? widget.global.style.selectedIconColorExpandable ??
-            widget.global.style.selectedColor ??
-            Colors.black
+        ? widget.global.style.selectedIconColorExpandable ?? widget.global.style.selectedColor ?? Colors.black
         : widget.global.style.unselectedIconColorExpandable ??
             widget.global.style.unselectedIconColor ??
             Colors.black54;
-    final double iconSize = widget.global.style.iconSizeExpandable ??
-        widget.global.style.iconSize ??
-        24;
+    final double iconSize = widget.global.style.iconSizeExpandable ?? widget.global.style.iconSize ?? 24;
 
     return Icon(mainIcon.icon, color: iconColor, size: iconSize);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: widget.global.displayModeState,
-      builder: (context, value, child) {
-        return ListTileTheme(
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: value == SideMenuDisplayMode.compact
-                ? widget.global.style.itemInnerSpacing
-                : widget.global.style.itemInnerSpacing + 5,
-          ),
-          horizontalTitleGap: 0,
-          child: ExpansionTile(
-              leading: SizedBox(
-                // Ensures the icon does not take the full tile width
-                width: 40.0, // Adjust size constraints as required
-                child: _generateIconWidget(widget.icon, widget.iconWidget),
-              ),
-              // The title should only take space when SideMenuDisplayMode is open
-              maintainState: true,
-              onExpansionChanged: (value) {
-                setState(() {
-                  isExpanded = value;
-                  widget.global.expansionStateList[widget.index] = value;
-                });
-                widget.onTap
-                    ?.call(widget.index, widget.global.controller, value);
-              },
-              trailing: Icon(
-                isExpanded
-                    ? Icons.arrow_drop_down_circle
-                    : Icons.arrow_drop_down,
-                color: isExpanded
-                    ? widget.global.style.arrowOpen
-                    : widget.global.style.arrowCollapse,
-              ),
-              initiallyExpanded: widget.global.expansionStateList[widget.index],
-              title: (value == SideMenuDisplayMode.open)
-                  ? Text(
-                      widget.title ?? '',
-                      style: widget.global.expansionStateList[widget.index]
-                          ? const TextStyle(fontSize: 17, color: Colors.black)
-                              .merge(widget.global.style
-                                      .selectedTitleTextStyleExpandable ??
-                                  widget.global.style.selectedTitleTextStyle)
-                          : const TextStyle(fontSize: 17, color: Colors.black54)
-                              .merge(widget.global.style
-                                      .unselectedTitleTextStyleExpandable ??
-                                  widget.global.style.unselectedTitleTextStyle),
-                    )
-                  : const Text(''),
-              children: widget.children),
-        );
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isExpanded = !isExpanded;
+          widget.global.expansionStateList[widget.index] = isExpanded;
+        });
+        widget.onTap?.call(widget.index, widget.global.controller, isExpanded);
       },
+      child: Column(
+        children: [
+          Padding(
+            padding: widget.global.style.itemOuterPadding,
+            child: Container(
+              height: widget.global.style.itemHeight,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: widget.global.style.itemBorderRadius,
+              ),
+              child: ValueListenableBuilder(
+                valueListenable: widget.global.displayModeState,
+                builder: (context, value, child) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: widget.global.style.itemInnerSpacing),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(width: widget.global.style.itemInnerSpacing * 2),
+                            _generateIconWidget(widget.icon, widget.iconWidget),
+                            SizedBox(width: widget.global.style.itemInnerSpacing),
+                            (value == SideMenuDisplayMode.open)
+                                ? Text(
+                                    widget.title ?? '',
+                                    style: widget.global.expansionStateList[widget.index]
+                                        ? const TextStyle(fontSize: 17, color: Colors.black).merge(
+                                            widget.global.style.selectedTitleTextStyleExpandable ??
+                                                widget.global.style.selectedTitleTextStyle)
+                                        : const TextStyle(fontSize: 17, color: Colors.black54).merge(
+                                            widget.global.style.unselectedTitleTextStyleExpandable ??
+                                                widget.global.style.unselectedTitleTextStyle),
+                                  )
+                                : const Text(''),
+                          ],
+                        ),
+                        Icon(
+                          isExpanded
+                              ? (widget.expandedOpenIcon ?? Icons.expand_less)
+                              : (widget.expandedCloseIcon ?? Icons.expand_more),
+                          color: isExpanded ? widget.global.style.arrowOpen : widget.global.style.arrowCollapse,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          if (isExpanded)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.children,
+            ),
+        ],
+      ),
     );
   }
 }
