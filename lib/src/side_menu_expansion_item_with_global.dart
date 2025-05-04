@@ -33,8 +33,6 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
   /// The icon to display when the menu is collapsed
   final IconData? expandedCloseIcon;
 
-  final EdgeInsets? expandedIconPadding;
-
   /// A function that will be called when tap on [SideMenuExpansionItem] corresponding
   /// to this [SideMenuExpansionItem]
   final void Function(int index, SideMenuController sideMenuController, bool isExpanded)? onTap;
@@ -47,7 +45,6 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
       this.iconWidget,
       this.expandedOpenIcon,
       this.expandedCloseIcon,
-      this.expandedIconPadding,
       this.onTap,
       required this.index,
       required this.children})
@@ -156,7 +153,7 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
                                   color: isExpanded ? widget.global.style.arrowOpen : widget.global.style.arrowCollapse,
                                 ),
                                 SizedBox(
-                                  width: widget.global.style.itemInnerSpacing,
+                                  width: widget.global.style.itemInnerSpacing * 2,
                                 ),
                               ],
                             ),
