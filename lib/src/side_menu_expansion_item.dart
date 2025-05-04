@@ -32,13 +32,13 @@ class SideMenuExpansionItem {
   final Color? dividerColor;
 
   /// Bool to show the divider or not
-  final bool showDivider;
+  final bool? showDivider;
 
   /// Divider thickness
-  final double dividerThickness;
+  final double? dividerThickness;
 
   /// Divider height
-  final double dividerHeight;
+  final double? dividerHeight;
 
   /// Control whether or not the SideMenuExpansion should be expanded initialy or not.
   /// Default is collabsed
@@ -54,9 +54,9 @@ class SideMenuExpansionItem {
     this.expandedOpenIcon,
     this.expandedCloseIcon,
     this.dividerColor,
-    this.showDivider = true,
-    this.dividerThickness = 1.0,
-    this.dividerHeight = 0.0,
+    this.showDivider,
+    this.dividerThickness,
+    this.dividerHeight,
     required this.children,
   })  : assert(title != null || icon != null, 'Title and icon should not be empty at the same time'),
         super();

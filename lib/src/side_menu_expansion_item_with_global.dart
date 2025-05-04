@@ -37,13 +37,13 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
   final Color? dividerColor;
 
   /// Bool to show the divider or not
-  final bool showDivider;
+  final bool? showDivider;
 
   /// Divider thickness
-  final double dividerThickness;
+  final double? dividerThickness;
 
   /// Divider height
-  final double dividerHeight;
+  final double? dividerHeight;
 
   /// A function that will be called when tap on [SideMenuExpansionItem] corresponding
   /// to this [SideMenuExpansionItem]
@@ -58,9 +58,9 @@ class SideMenuExpansionItemWithGlobal extends StatefulWidget {
       this.expandedOpenIcon,
       this.expandedCloseIcon,
       this.dividerColor,
-      this.showDivider = true,
-      this.dividerThickness = 1.0,
-      this.dividerHeight = 0.0,
+      this.showDivider,
+      this.dividerThickness,
+      this.dividerHeight,
       this.onTap,
       required this.index,
       required this.children})
@@ -105,11 +105,11 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (isExpanded && widget.showDivider)
+        if (isExpanded && widget.showDivider == true)
           Divider(
             color: widget.dividerColor ?? Colors.black,
-            height: widget.dividerHeight,
-            thickness: widget.dividerThickness,
+            height: widget.dividerHeight ?? 0.5,
+            thickness: widget.dividerThickness ?? 0.5,
           ),
         InkWell(
           onTap: () {
@@ -194,11 +194,11 @@ class _SideMenuExpansionState extends State<SideMenuExpansionItemWithGlobal> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...widget.children,
-              if (isExpanded && widget.showDivider)
+              if (isExpanded && widget.showDivider == true)
                 Divider(
                   color: widget.dividerColor ?? Colors.black,
-                  height: widget.dividerHeight,
-                  thickness: widget.dividerThickness,
+                  height: widget.dividerHeight ?? 0.5,
+                  thickness: widget.dividerThickness ?? 0.5,
                 ),
             ],
           ),

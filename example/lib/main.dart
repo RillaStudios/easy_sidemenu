@@ -97,6 +97,36 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             items: [
+              SideMenuExpansionItem(
+                title: "Expansion Item",
+                icon: const Icon(Icons.kitchen),
+                showDivider: true,
+                dividerColor: Colors.red,
+                dividerThickness: 10,
+                dividerHeight: 10,
+                onTap: (index, _, isExpanded) => {print('$index, expanded $isExpanded')},
+                children: [
+                  SideMenuItem(
+                    title: 'Expansion Item 1',
+                    onTap: (index, _) {
+                      sideMenu.changePage(index);
+                    },
+                    icon: const Icon(Icons.home),
+                    badgeContent: const Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    tooltipContent: "Expansion Item 1",
+                  ),
+                  SideMenuItem(
+                    title: 'Expansion Item 2',
+                    onTap: (index, _) {
+                      sideMenu.changePage(index);
+                    },
+                    icon: const Icon(Icons.supervisor_account),
+                  )
+                ],
+              ),
               SideMenuItem(
                 title: 'Dashboard',
                 onTap: (index, _) {
@@ -162,6 +192,10 @@ class _MyHomePageState extends State<MyHomePage> {
               SideMenuExpansionItem(
                 title: "Expansion Item",
                 icon: const Icon(Icons.kitchen),
+                showDivider: true,
+                dividerColor: Colors.grey,
+                dividerThickness: 1,
+                dividerHeight: 1,
                 onTap: (index, _, isExpanded) => {print('$index, expanded $isExpanded')},
                 children: [
                   SideMenuItem(

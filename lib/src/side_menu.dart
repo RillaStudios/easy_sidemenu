@@ -104,6 +104,10 @@ class SideMenu extends StatefulWidget {
           onTap: data.onTap,
           expandedCloseIcon: data.expandedCloseIcon,
           expandedOpenIcon: data.expandedOpenIcon,
+          dividerColor: data.dividerColor,
+          showDivider: data.showDivider,
+          dividerThickness: data.dividerThickness,
+          dividerHeight: data.dividerHeight,
           children: data.children
               .map((childData) => SideMenuItemWithGlobal(
                     global: global,
